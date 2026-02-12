@@ -26,9 +26,10 @@ class User {
     +password: string
     +is_admin: bool
 
-    +register() void
-    +update_profile() void
-    +delete_profile() void
+    +register(data: dict): User
+    +update_profile(data: dict): void
+    +delete_profile(): void
+
 }
 
 class Place {
@@ -38,30 +39,30 @@ class Place {
     +latitude: float
     +longitude: float
 
-    +create() void
-    +update() void
-    +delete() void
-    +list() void
+    +create(data: dict): Place
+    +update(data: dict): void
+    +delete(): void
+    +list(): List~Place~
 }
 
 class Review {
     +rating: int
     +comment: string
 
-    +create() void
-    +update() void
-    +delete() void
-    +list() void
+    +create(data: dict): Review
+    +update(data: dict): void
+    +delete(): void
+    +list(): List~Review~
 }
 
 class Amenity {
     +name: string
     +description: string
 
-    +create() void
-    +update() void
-    +delete() void
-    +list() void
+    +create(data: dict): Amenity
+    +update(data: dict): void
+    +delete(): void
+    +list(): List~Amenity~
 }
 
 BaseEntity <|-- User : extends
