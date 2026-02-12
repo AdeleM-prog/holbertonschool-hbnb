@@ -1,5 +1,5 @@
 # Holberton School - HBnB
-### Sequence Diagrams for API calls of the HBnB Evolution application
+## Sequence Diagrams for API calls of the HBnB Evolution application
 
 ---
 
@@ -9,34 +9,34 @@ sequenceDiagram
 
 participant User
 participant API
-participant BusinessLogic
-participant Database
+participant BL as BusinessLogic<br/>(UserService)
+participant DB as Database
 
 User->>API: Register account
-API->>BusinessLogic: Validate and process registration
-BusinessLogic->>BusinessLogic: Validate User data
+API->>BL: Validate and process registration
+BL->>BL: Validate User data
 
 alt Invalid data
-    BusinessLogic-->>API: 400 Bad Request
+    BL-->>API: 400 Bad Request
     API-->>User: 400 Bad Request
 
 else Valid data
-    BusinessLogic->>Database: Save User
-    Database->>Database: Execute INSERT
+    BL->>DB: Save User
+    DB->>DB: Execute INSERT
 
     alt User already exists
-        Database-->>BusinessLogic: Insert failed (duplicate email)
-        BusinessLogic-->>API: 409 Conflict
+        DB-->>BL: Insert failed (duplicate email)
+        BL-->>API: 409 Conflict
         API-->>User: 409 Conflict
     
     else DB error
-        Database-->>BusinessLogic: Insert failed
-        BusinessLogic-->>API: 500 Internal Server Error
+        DB-->>BL: Insert failed
+        BL-->>API: 500 Internal Server Error
         API-->>User: 500 Internal Server Error
         
     else Success
-        Database-->>BusinessLogic: Insert OK
-        BusinessLogic-->>API: 201 Created + UserDTO
+        DB-->>BL: Insert OK
+        BL-->>API: 201 Created + UserDTO
         API-->>User: 201 Created + UserDTO
     end
 end
@@ -66,37 +66,37 @@ sequenceDiagram
 
 participant User
 participant API
-participant BusinessLogic
-participant Database
+participant BL as BusinessLogic<br/>(PlaceService)
+participant DB as Database
 
 User->>API: Create Place
-API->>BusinessLogic: Validate and process creation
-BusinessLogic->>BusinessLogic: Validate Place data
+API->>BL: Validate and process creation
+BL->>BL: Validate Place data
 
 alt Invalid data
-    BusinessLogic-->>API: 400 Bad Request
+    BL-->>API: 400 Bad Request
     API-->>User: 400 Bad Request
 
 else User not connected
-    BusinessLogic-->>API: 401 Unauthorized
+    BL-->>API: 401 Unauthorized
     API-->>User: 401 Unauthorized
 
 else User not allowed
-    BusinessLogic-->>API: 403 Forbidden
+    BL-->>API: 403 Forbidden
     API-->>User: 403 Forbidden
 
 else Valid data
-    BusinessLogic->>Database: Save Place
-    Database->>Database: Execute INSERT
+    BL->>DB: Save Place
+    DB->>DB: Execute INSERT
 
     alt DB error
-        Database-->>BusinessLogic: Insert failed
-        BusinessLogic-->>API: 500 Internal Server Error
+        DB-->>BL: Insert failed
+        BL-->>API: 500 Internal Server Error
         API-->>User: 500 Internal Server Error
     
     else Success
-        Database-->>BusinessLogic: Insert OK
-        BusinessLogic-->>API: 201 Created + PlaceDTO
+        DB-->>BL: Insert OK
+        BL-->>API: 201 Created + PlaceDTO
         API-->>User: 201 Created + PlaceDTO
     end
 end
@@ -126,41 +126,41 @@ This diagram shows how a place is created and stored after validation and author
 sequenceDiagram
 participant User
 participant API
-participant BusinessLogic
-participant Database
+participant BL as BusinessLogic<br/>(ReviewService)
+participant DB as Database
 
 User->>API: Create Review
-API->>BusinessLogic: Validate and process creation
-BusinessLogic->>BusinessLogic: Validate Review data
+API->>BL: Validate and process creation
+BL->>BL: Validate Review data
 
 alt Invalid data
-    BusinessLogic-->>API: 400 Bad Request
+    BL-->>API: 400 Bad Request
     API-->>User: 400 Bad Request
 
 else User not connected
-    BusinessLogic-->>API: 401 Unauthorized
+    BL-->>API: 401 Unauthorized
     API-->>User: 401 Unauthorized
 
 else User not allowed
-    BusinessLogic-->>API: 403 Forbidden
+    BL-->>API: 403 Forbidden
     API-->>User: 403 Forbidden
 
 else Place not found
-    BusinessLogic-->>API: 404 Not Found
+    BL-->>API: 404 Not Found
     API-->>User: 404 Not Found
 
 else Valid data
-    BusinessLogic->>Database: Save Review
-    Database->>Database: Execute INSERT
+    BL->>DB: Save Review
+    DB->>DB: Execute INSERT
 
     alt DB error
-        Database-->>BusinessLogic: Insert failed
-        BusinessLogic-->>API: 500 Internal Server Error
+        DB-->>BL: Insert failed
+        BL-->>API: 500 Internal Server Error
         API-->>User: 500 Internal Server Error
     
     else Success
-        Database-->>BusinessLogic: Insert OK
-        BusinessLogic-->>API: 201 Created + ReviewDTO
+        DB-->>BL: Insert OK
+        BL-->>API: 201 Created + ReviewDTO
         API-->>User: 201 Created + ReviewDTO
     end
 end
@@ -193,29 +193,29 @@ sequenceDiagram
 
 participant User
 participant API
-participant BusinessLogic
-participant Database
+participant BL as BusinessLogic<br/>(PlaceService)
+participant DB as Database
 
 User->>API: Get places
-API->>BusinessLogic: Validate filters and fetch places
-BusinessLogic->>BusinessLogic: Validate filters
+API->>BL: Validate filters and fetch places
+BL->>BL: Validate filters
 
 alt Invalid filters
-    BusinessLogic-->>API: 400 Bad Request
+    BL-->>API: 400 Bad Request
     API-->>User: 400 Bad Request
 
 else Valid filters
-    BusinessLogic->>Database: Query places
-    Database->>Database: Execute SELECT
+    BL->>DB: Query places
+    DB->>DB: Execute SELECT
 
     alt DB error
-        Database-->>BusinessLogic: Query failed
-        BusinessLogic-->>API: 500 Internal Server Error
+        DB-->>BL: Query failed
+        BL-->>API: 500 Internal Server Error
         API-->>User: 500 Internal Server Error
     
     else Success
-        Database-->>BusinessLogic: Query OK
-        BusinessLogic-->>API: 200 OK + PlacesDTO[]
+        DB-->>BL: Query OK
+        BL-->>API: 200 OK + PlacesDTO[]
         API-->>User: 200 OK + PlacesDTO[]
     end
 end
