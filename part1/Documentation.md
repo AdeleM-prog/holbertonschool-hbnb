@@ -7,14 +7,14 @@
 **HBnB Evolution is a simplified AirBnB-like platform designed to manage users, places, amenities, and reviews.**
 
 
-This first phase of the HBnB project, the objective was to give a clear understanding of the application's architecture by creating visual diagrams, underlining the interactions within the system.
-This document sums up all diagrams aud explanations into a simple technical document. 
-The purpose of that document is to give a clear guideline in the elaboration of the HBnB architecture, detailling the different interactions between the layers and classes of the application. 
+In this first phase of the HBnB project, the objective was to give a clear understanding of the application's architecture by creating visual diagrams, underlining the interactions within the system.
+This document sums up all diagrams and explanations into a simple technical document. 
+The purpose of that document is to give a clear guideline in the elaboration of the HBnB architecture, detailing the different interactions between the layers and classes of the application. 
 
 ---
 
 ## High-Level Architecture:
-**This diagram illustrates the main structure of the application, his three main layers, the components in each of them, and the communication between them.**
+**This diagram illustrates the main structure of the application, its three main layers, the components in each of them, and the communication between them.**
 
 ### High-Level Package Diagram of the HBnB Evolution application:
 
@@ -41,15 +41,15 @@ BusinessLogicLayer --> PersistenceLayer : Database Operations
 ---
 
 ### Description of the layered architecture of the HBnB Evolution application:
-The aim of the three layers of the diagram is to seperate responsabilities:
+The aim of the three layers of the diagram is to separate responsibilities:
 - API is the entry point where external clients send requests. Controllers receive requests and call business logic.
-- Business Logic Layer is the brain of the application. It contains application rules and core logic. HBnBFacade is the single entry point to access business operations: it centralizes the operations and simplifizes the access to the business logic. Models are core entities representing application objects (see Class Diagram). DomainServices contain the business logic and the relation between entities (e.g.: check that the user is allowed to review a place).
-- Persistence Layer handles data storage and retrieval. Repositories are intermediaries between business logic and data base. They manage saving, update and loading objects from database. Database is the real storage of the application data permanently.
+- Business Logic Layer is the brain of the application. It contains application rules and core logic. HBnBFacade is the single entry point to access business operations: it centralizes the operations and simplifies the access to the business logic. Models are core entities representing application objects (see Class Diagram). DomainServices contain the business logic and the relation between entities (e.g.: check that the user is allowed to review a place).
+- Persistence Layer handles data storage and retrieval. Repositories are intermediaries between business logic and database. They manage saving, updating and loading objects from database. Database is the real storage of the application data permanently.
 
 ---
 
 ## Business Logic Layer:
-**This diagram shows the differents classes, attributes and methods and illustrate the intrications and relations between them.**
+**This diagram shows the different classes of HBnB, attributes and methods and illustrate the interactions and relationships between them.**
 
 ### Class diagram:
 
@@ -135,27 +135,27 @@ This diagram represents the internal structure of the business logic of HBnB. It
 - The BaseEntity is the common parent class for all HBnB entities. It provides shared attributes across all business entities.
 - The User represents a platform user, it stores personal information and authentication data, can register, update, or delete their profile. It may have administrator privileges.
 - Place represents a property, it contains descriptive information, pricing, and geographic location, and supports creation, update, deletion, and listing operations.
-- The Review reunites the comment and rating given by other users. It Supports creation, update, deletion, and listing operations.
-- The Amenity class brings together all the equipments of a place and manages them. It contains a name and description and supports creation, update, deletion, and listing operations.
+- The Review represents the combination of a comment and a rating given by other users. It supports creation, update, deletion, and listing operations.
+- The Amenity class brings together all the features or services of a place and manages them. It contains a name and description and supports creation, update, deletion, and listing operations.
 
-The aim of the diagram is to represent to relations between the different instance classes. These relationships define how core entities interact within the business logic layer and ensure consistent data connections across the application.
+The aim of the diagram is to represent the relations between the different instance classes. These relationships define how core entities interact within the business logic layer and ensure consistent data connections across the application.
 All of the entities inherit common attributes from the BaseEntity
 Place -> User (owner): a place belongs to one owner, but an owner can possess several places
 Place -> Amenity: a place can have several amenities, and an equipment can be associated to several places
 Place -> Review: a place can have several reviews, and each review concerns only one place
-Review -> User (Author): one user can write several reviews, and each reviews has an author.
+Review -> User (Author): one user can write several reviews, and each review has an author.
 
 ---
 
 ##  Interaction between the layers and the flow of information for API calls:
-**This section provide illustrations for the main API calls in HBnB.**
+**This section provides illustrations for the main API calls in HBnB.**
 
 ### Sequence diagrams:
 
 ---
 
 ## 1. User Registration:
-This kind of diagram shows the normal flow of a program and also the errors management: where validations occur, how errors are treated, which response is delivered to the user.
+This kind of diagram shows the normal flow of a program and also the error handling: where validations occur, how errors are treated, which response is delivered to the user.
 
 
 ```mermaid
