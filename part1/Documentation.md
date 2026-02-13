@@ -1,15 +1,22 @@
-Introduction:
+# Holberton School - HBnB 
+## Technical Documentation of the HBnB Evolution application
+
+---
+
+## Introduction:
+**HBnB Evolution is a simplified AirBnB-like platform designed to manage users, places, amenities, and reviews.**
+
+
 This first phase of the HBnB project, the objective was to give a clear understanding of the application's architecture by creating visual diagrams, underlining the interactions within the system.
 This document sums up all diagrams aud explanations into a simple technical document. 
 The purpose of that document is to give a clear guideline in the elaboration of the HBnB architecture, detailling the different interactions between the layers and classes of the application. 
 
-High-Level Architecture: High-Level Package Diagram with explanations.
-
-This diagram illustrates the main structure of the application, his three main layers, the components in each of them, and the communication between them.
-
-## High-Level Package Diagram of the HBnB Evolution application
-
 ---
+
+## High-Level Architecture:
+**This diagram illustrates the main structure of the application, his three main layers, the components in each of them, and the communication between them.**
+
+### High-Level Package Diagram of the HBnB Evolution application:
 
 ```mermaid
 classDiagram
@@ -33,16 +40,97 @@ BusinessLogicLayer --> PersistenceLayer : Database Operations
 
 ---
 
-Description of the layered architecture of the HBnB Evolution application
+### Description of the layered architecture of the HBnB Evolution application:
 The aim of the three layers of the diagram is to seperate responsabilities:
 - API is the entry point where external clients send requests. Controllers receive requests and call business logic.
 - Business Logic Layer is the brain of the application. It contains application rules and core logic. HBnBFacade is the single entry point to access business operations: it centralizes the operations and simplifizes the access to the business logic. Models are core entities representing application objects (see Class Diagram). DomainServices contain the business logic and the relation between entities (e.g.: check that the user is allowed to review a place).
 - Persistence Layer handles data storage and retrieval. Repositories are intermediaries between business logic and data base. They manage saving, update and loading objects from database. Database is the real storage of the application data permanently.
 
+---
 
+## Business Logic Layer:
+**This diagram shows the differents classes, attributes and methods and illustrate the intrications and relations between them.**
 
+### Class diagram:
 
-Description of the Class Diagram refering to the business logic layer
+```mermaid
+classDiagram
+direction LR
+
+class BaseEntity
+class User
+class Place
+class Review
+class Amenity
+
+class BaseEntity {
+    +id: UUID4
+    +created_at: datetime
+    +updated_at: datetime
+}
+
+class User {
+    +first_name: string
+    +last_name: string
+    +email: string
+    +password: string
+    +is_admin: bool
+
+    +register(data: dict) User
+    +update_profile(data: dict) void
+    +delete_profile() void
+
+}
+
+class Place {
+    +title: string
+    +description: string
+    +price: float
+    +latitude: float
+    +longitude: float
+
+    +create(data: dict) Place
+    +update(data: dict) void
+    +delete() void
+    +list() List~Place~
+}
+
+class Review {
+    +rating: int
+    +comment: string
+
+    +create(data: dict) Review
+    +update(data: dict) void
+    +delete() void
+    +list() List~Review~
+}
+
+class Amenity {
+    +name: string
+    +description: string
+
+    +create(data: dict) Amenity
+    +update(data: dict) void
+    +delete() void
+    +list() List~Amenity~
+}
+
+BaseEntity <|-- User : extends
+BaseEntity <|-- Place : extends
+BaseEntity <|-- Amenity : extends
+
+Place "0..*" --> "1" User : owner
+Place "0..*" --> "0..*" Amenity : amenities
+Place "1" --> "0..*" Review : reviews
+Review "0..*" --> "1" User : author
+
+BaseEntity <|-- Review : extends
+```
+
+---
+
+### Description of the Class Diagram refering to the business logic layer:
+
 This diagram represents the internal structure of the business logic of HBnB. It is divided in five entities:
 - The BaseEntity is the common parent class for all HBnB entities. It provides shared attributes across all business entities.
 - The User represents a platform user, it stores personal information and authentication data, can register, update, or delete their profile. It may have administrator privileges.
@@ -57,10 +145,14 @@ Place -> Amenity: a place can have several amenities, and an equipment can be as
 Place -> Review: a place can have several reviews, and each review concerns only one place
 Review -> User (Author): one user can write several reviews, and each reviews has an author.
 
+---
 
+##  Interaction between the layers and the flow of information for API calls:
+**This section provide illustrations for the main API calls in HBnB.**
 
-Sequence diagrams:
+### Sequence diagrams:
 
+---
 
 ## 1. User Registration:
 This kind of diagram shows the normal flow of a program and also the errors management: where validations occur, how errors are treated, which response is delivered to the user.
@@ -105,21 +197,20 @@ end
 ```
 
 ---
----
-## Description
+
+## Description:
 This sequence diagram illustrates the process of user registration, from the client request to database persistence and response delivery.
 
-### Business Rules
+### Business Rules:
 - User email must be unique.
 - User data must be valid before persistence.
 - Registration fails if the email already exists.
 
-### Possible Outcomes
+### Possible Outcomes:
 - 201 Created: user successfully created.
 - 400 Bad Request: invalid user data.
 - 409 Conflict: email already exists.
 - 500 Internal Server Error: database failure.
- ---
 
 ---
 
@@ -167,15 +258,15 @@ end
 
 ---
 
-## Description
+## Description:
 This diagram shows how a place is created and stored after validation and authorization checks.
 
-### Business Rules
+### Business Rules:
 - Only authenticated users can create places.
 - Each place must have valid data.
 - The creator becomes the owner of the place.
 
-### Possible Outcomes
+### Possible Outcomes:
 - 201 Created: place successfully created.
 - 400 Bad Request: invalid place data.
 - 401 Unauthorized: user not authenticated.
@@ -231,16 +322,16 @@ end
 
 ---
 
-## Description
+## Description:
 This diagram illustrates the submission of a review for a place.
 
-### Business Rules
+### Business Rules:
 - Only authenticated users can submit reviews.
 - A user cannot review their own place.
 - A review must target an existing place.
 - Review data must be valid before saving.
 
-### Possible Outcomes
+### Possible Outcomes:
 - 201 Created: review successfully saved.
 - 400 Bad Request: invalid review data.
 - 401 Unauthorized: user not authenticated.
@@ -286,14 +377,14 @@ end
 
 ---
 
-## Description
+## Description:
 This diagram shows how a list of places is fetched based on search filters.
 
-### Business Rules
+### Business Rules:
 - Search filters must be valid.
 - Results may be empty if no places match filters.
 
-### Possible Outcomes
+### Possible Outcomes:
 - 200 OK: places (or an empty list) successfully returned.
 - 400 Bad Request: invalid search filters.
 - 500 Internal Server Error: database failure.
