@@ -139,11 +139,13 @@ This diagram represents the internal structure of the business logic of HBnB. It
 - The Amenity class brings together all the features or services of a place and manages them. It contains a name and description and supports creation, update, deletion, and listing operations.
 
 The aim of the diagram is to represent the relations between the different instance classes. These relationships define how core entities interact within the business logic layer and ensure consistent data connections across the application.
-All of the entities inherit common attributes from the BaseEntity
-Place -> User (owner): a place belongs to one owner, but an owner can possess several places
-Place -> Amenity: a place can have several amenities, and an equipment can be associated to several places
-Place -> Review: a place can have several reviews, and each review concerns only one place
-Review -> User (Author): one user can write several reviews, and each review has an author.
+
+All of the entities inherit common attributes from the BaseEntity  
+Place -> User (owner): a place belongs to one owner, but an owner can possess several places  
+Place -> Amenity: a place can have several amenities, and an equipment can be associated to several places  
+Place -> Review: a place can have several reviews, and each review concerns only one place  
+Review -> User (Author): one user can write several reviews, and each review has an author  
+
 
 ---
 
@@ -151,12 +153,10 @@ Review -> User (Author): one user can write several reviews, and each review has
 **This section provides illustrations for the main API calls in HBnB.**
 
 ### Sequence diagrams:
-
 ---
+**This kind of diagram shows the normal flow of a program and also the error handling: where validations occur, how errors are treated, which response is delivered to the user.**
 
 ## 1. User Registration:
-This kind of diagram shows the normal flow of a program and also the error handling: where validations occur, how errors are treated, which response is delivered to the user.
-
 
 ```mermaid
 sequenceDiagram
