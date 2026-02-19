@@ -14,17 +14,17 @@ class Review
 class Amenity
 
 class BaseEntity {
-    +id: UUID4
-    +created_at: datetime
-    +updated_at: datetime
+    #id: UUID4
+    #created_at: datetime
+    #updated_at: datetime
 }
 
 class User {
     +first_name: string
     +last_name: string
-    +email: string
-    +password: string
-    +is_admin: bool
+    -email: string
+    -password: string
+    -is_admin: bool
 
     +register(data: dict) User
     +update_profile(data: dict) void
