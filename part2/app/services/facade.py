@@ -9,6 +9,7 @@ The facade acts as the single entry point between the Presentation layer
 
 from app.persistence.repository import InMemoryRepository
 
+
 class HBnBFacade:
     """
     Facade class that centralizes access to the application's
@@ -32,7 +33,7 @@ class HBnBFacade:
 
     # Placeholder method for creating a user
     def create_user(self, user_data):
-         """
+        """
         Create a new user.
 
         Args:

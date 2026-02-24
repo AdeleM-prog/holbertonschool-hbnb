@@ -12,6 +12,7 @@ can be defined by extending the base Config class.
 
 import os
 
+
 class Config:
     """
     Base configuration class.
@@ -23,6 +24,7 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
     DEBUG = False
 
+
 class DevelopmentConfig(Config):
     """
     Development environment configuration.
@@ -30,6 +32,7 @@ class DevelopmentConfig(Config):
     Inherits from Config and enables debug mode.
     """
     DEBUG = True
+
 
 config = {
     'development': DevelopmentConfig,

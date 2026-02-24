@@ -2,6 +2,7 @@
 
 from .base import BaseModel
 
+
 class Amenity(BaseModel):
     def __init__(self, name, description=None):
         super().__init__()
@@ -16,7 +17,7 @@ class Amenity(BaseModel):
                 raise ValueError("Name must be 50 characters maximum")
         else:
             raise TypeError("Name must be a string")
-        
+
         if description is None:
             self.description = description
         else:
@@ -24,7 +25,8 @@ class Amenity(BaseModel):
                 if len(description) <= 150:
                     self.description = description
                 else:
-                    raise ValueError("Description must be maximum 150 characters")
+                    raise ValueError(
+                        "Description must be maximum 150 characters"
+                        )
             else:
                 raise TypeError("Description must be a string")
-
