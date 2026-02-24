@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
-from app.models.user import User
+
+from app.model.base import BaseModel
+from app.models.amenity import Amenity
 
 
 class Place(BaseModel):
@@ -59,10 +61,20 @@ class Place(BaseModel):
         self.amenities = []  # List to store related amenities
     def add_review(self, review):
         """Add a review to the place."""
-        self.reviews.append(review)
+        if isinstance(review, Review):
+            self.reviews.append(review)
+        else:
+            raise TypeError("Review must be an instance of Review")
 
     def add_amenity(self, amenity):
         """Add an amenity to the place."""
+        if isinstance(amenity, Amenity):
+            pass
+        else:
+            raise TypeError("Amenities must be an instance of Amenity")
+        for element in self.amenities:
+            if amenity.id == element.id:
+                raise ValueError("Amenity already exists")
         self.amenities.append(amenity)
-    
-    def update(self, data):
+        
+
