@@ -49,13 +49,13 @@ class Review(BaseModel):
         if not isinstance(rating, int):
             raise TypeError("Rating must be an integer")
 
-        if rating < 1 or rating > 5:
-            raise ValueError("Rating must be between 1 and 5")
+        if rating < 0 or rating > 5:
+            raise ValueError("Rating must be between 0 and 5")
 
         if not isinstance(comment, str):
             raise TypeError("Comment must be a string")
 
-        cleaned_comment = comment.strip(" ,;:!?./")
+        cleaned_comment = comment.strip(" ,;:/")
 
         if len(cleaned_comment) < 15:
             raise ValueError(
