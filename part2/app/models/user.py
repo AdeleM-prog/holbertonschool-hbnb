@@ -51,27 +51,42 @@ class User(BaseModel):
         if not password:
             raise ValueError("Password is required")
 
+        super().__init__()
+
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = self._validate_email(email)
+        self.password = self._validate_password(password)
+        self.is_admin = False
+        self.place_ids = []
+        self.review_ids = []
+
+    @staticmethod
+    def _validate_email(email):
+        """
+        Validate email rules.
+
+        Args:
+            email (str): Email to validate.
+
+        Raises:
+            ValueError: If the email does not meet structural requirements.
+        """
         if email.count("@") != 1:
             raise ValueError("Email must be valid: it must contain a '@' sign")
 
         local_part, domain_part = email.split("@")
 
         if (
-            len(local_part) < 1
-            or len(domain_part) < 1
-            or domain_part.count(".") < 1
+            not local_part
+            or not domain_part
+            or "." not in domain_part
+            or domain_part.startswith(".")
+            or domain_part.endswith(".")
         ):
             raise ValueError("Email must be valid")
 
-        super().__init__()
-
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
-        self.password = self._validate_password(password)
-        self.is_admin = False
-        self.place_ids = []
-        self.review_ids = []
+        return email
 
     @staticmethod
     def _validate_password(password):
@@ -95,7 +110,7 @@ class User(BaseModel):
         if not any(char.isupper() for char in password):
             raise ValueError(
                 "Password must contain at least one uppercase letter"
-                )
+            )
 
         return password
 
