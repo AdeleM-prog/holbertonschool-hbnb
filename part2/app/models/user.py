@@ -39,11 +39,18 @@ class User(BaseModel):
         ):
             raise TypeError("Invalid data: all fields must be strings")
 
-        if not first_name:
+        first_name = first_name.strip()
+        last_name = last_name.strip()
+
+        if not first_name or len(first_name) == 0:
             raise ValueError("First name is required")
+        if len(first_name) > 50:
+            raise ValueError("First name must not exceed 50 characters")
 
         if not last_name:
             raise ValueError("Last name is required")
+        if len(last_name) > 50:
+            raise ValueError("Last name must not exceed 50 characters")
 
         if not email:
             raise ValueError("Email is required")
@@ -72,6 +79,8 @@ class User(BaseModel):
         Raises:
             ValueError: If the email does not meet structural requirements.
         """
+        email = email.strip().lower()
+
         if email.count("@") != 1:
             raise ValueError("Email must be valid: it must contain a '@' sign")
 
@@ -124,6 +133,9 @@ class User(BaseModel):
         Adds the place ID to the user's place_ids list
         if it is not already present.
         """
+        if not hasattr(place, "id"):
+            raise TypeError("Place must have an 'id' attribute")
+        self._validate_uuid(place.id, "place.id")
         if place.id not in self.place_ids:
             self.place_ids.append(place.id)
 
@@ -137,6 +149,9 @@ class User(BaseModel):
         Removes the place ID from the user's place_ids list
         if it exists.
         """
+        if not hasattr(place, "id"):
+            raise TypeError("Place must have an 'id' attribute")
+        self._validate_uuid(place.id, "place.id")
         if place.id in self.place_ids:
             self.place_ids.remove(place.id)
 
@@ -150,6 +165,9 @@ class User(BaseModel):
         Adds the review ID to the user's review_ids list
         if it is not already present.
         """
+        if not hasattr(review, "id"):
+            raise TypeError("Review must have an 'id' attribute")
+        self._validate_uuid(review.id, "review.id")
         if review.id not in self.review_ids:
             self.review_ids.append(review.id)
 
@@ -163,5 +181,8 @@ class User(BaseModel):
         Removes the review ID from the user's review_ids list
         if it exists.
         """
+        if not hasattr(review, "id"):
+            raise TypeError("Review must have an 'id' attribute")
+        self._validate_uuid(review.id, "review.id")
         if review.id in self.review_ids:
             self.review_ids.remove(review.id)

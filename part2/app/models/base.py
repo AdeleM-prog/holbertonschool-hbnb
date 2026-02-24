@@ -69,3 +69,26 @@ class BaseModel:
                 setattr(self, key, value)
 
         self.save()  # Update the updated_at timestamp
+
+    @staticmethod
+    def _validate_uuid(value, field_name):
+        """
+         Validate that a given string is a valid UUID.
+
+        Args:
+            value (str): The value to validate.
+            field_name (str): Field name for error reporting.
+
+        Raises:
+            TypeError: If value is not a string.
+            ValueError: If value is not a valid UUID string.
+        """
+        if not isinstance(value, str):
+            raise TypeError(f"{field_name} must be a string")
+
+        try:
+            uuid.UUID(value)
+        except ValueError as exc:
+            raise ValueError(
+                f"{field_name} must be a valid UUID"
+            ) from exc
