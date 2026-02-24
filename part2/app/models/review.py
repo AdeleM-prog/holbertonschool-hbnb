@@ -7,7 +7,6 @@ left by a user for a place in the HBnB application.
 """
 
 
-import uuid
 from .base import BaseModel
 
 
@@ -22,7 +21,7 @@ class Review(BaseModel):
         - Contains a textual comment
     """
 
-    def __init__(self, author, place, rating=0, comment=""):
+    def __init__(self, author, place, rating=1, text=""):
         """
         Initialize a new Review instance.
 
@@ -30,7 +29,7 @@ class Review(BaseModel):
             author (object): The user object who writes the review.
             place (object): The place object being reviewed.
             rating (int): Rating score between 1 and 5.
-            comment (str): Review comment (minimum length required).
+            text (str): Review comment (minimum length required).
 
         Raises:
             TypeError: If types are invalid.
@@ -49,44 +48,20 @@ class Review(BaseModel):
         if not isinstance(rating, int):
             raise TypeError("Rating must be an integer")
 
-        if rating < 0 or rating > 5:
-            raise ValueError("Rating must be between 0 and 5")
+        if rating < 1 or rating > 5:
+            raise ValueError("Rating must be between 1 and 5")
 
-        if not isinstance(comment, str):
+        if not isinstance(text, str):
             raise TypeError("Comment must be a string")
 
-        cleaned_comment = comment.strip(" ,;:/")
+        cleaned_text = text.strip(" ,;:/")
 
-        if len(cleaned_comment) < 15:
-            raise ValueError(
-                "Comment must be at least 15 characters long"
-            )
+        if len(cleaned_text) == 0:
+            raise ValueError("Comment must not be void")
 
         super().__init__()
 
         self.author_id = author.id
         self.place_id = place.id
         self.rating = rating
-        self.comment = cleaned_comment
-
-    @staticmethod
-    def _validate_uuid(value, field_name):
-        """
-        Validate that a given string is a valid UUID.
-
-        Args:
-            value (str): The value to validate.
-            field_name (str): Field name for error reporting.
-
-        Raises:
-            ValueError: If the value is not a valid UUID.
-        """
-        if not isinstance(value, str):
-            raise TypeError(f"{field_name} must be a string")
-
-        try:
-            uuid.UUID(value)
-        except ValueError as exc:
-            raise ValueError(
-                f"{field_name} must be a valid UUID"
-            ) from exc
+        self.text = cleaned_text
