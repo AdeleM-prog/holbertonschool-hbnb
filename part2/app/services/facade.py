@@ -29,10 +29,9 @@ class HBnBFacade:
         """
         self.user_repo = InMemoryRepository()
 
+    # ---------- USERS ----------
     def create_user(self, user_data):
         """
-        Create a new user.
-
         """
         user = User(**user_data)
         self.user_repo.add(user)
@@ -43,7 +42,26 @@ class HBnBFacade:
         """
         return self.user_repo.get(user_id)
 
+    def get_users(self):
+        """
+        """
+        return self.user_repo.get_all()
+
     def get_user_by_email(self, email):
         """
         """
         return self.user_repo.get_by_attribute('email', email)
+
+    def update_user(self, user_id, user_data):
+        """
+        """
+        user = self.user_repo.get(user_id)
+        if not user:
+            return None
+
+        # prevent protected fields from being updated
+        forbidden = {'id', 'created_at', 'updated_at', 'is_admin', 'place_ids', 'review_ids'}
+        clean_data = {k: v for k, v in user_data.items() if k not in forbidden}
+
+        self.user_repo.update(user_id, clean_data)
+        return self.user_repo.get(user_id)
