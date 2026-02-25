@@ -9,6 +9,7 @@ The facade acts as the single entry point between the Presentation layer
 
 from app.persistence.repository import InMemoryRepository
 from ..models.user import User
+from ..models.review import Review
 
 
 class HBnBFacade:
@@ -28,6 +29,9 @@ class HBnBFacade:
         is managed by a dedicated repository instance.
         """
         self.user_repo = InMemoryRepository()
+        self.place_repo = InMemoryRepository()
+        self.review_repo = InMemoryRepository()
+        self.amenity_repo = InMemoryRepository()
 
     # ---------- USERS ----------
     def create_user(self, user_data):
@@ -65,3 +69,48 @@ class HBnBFacade:
 
         self.user_repo.update(user_id, clean_data)
         return self.user_repo.get(user_id)
+
+    # ---------- REVIEWS ----------
+    def create_review(self, review_data):
+        if not self.user_repo.get(review_data["user_id"]):
+            raise ValueError("User not found")
+
+        if not self.place_repo.get(review_data["place_id"]):
+            raise ValueError("Place not found")
+
+        review = Review(**review_data)
+        self.review_repo.add(review)
+        return review
+
+    def get_review(self, review_id):
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        return self.review_repo.get_all()
+
+    def get_reviews_by_place(self, place_id):
+        return [
+            review
+            for review in self.review_repo.get_all()
+            if review.place_id == place_id
+        ]
+
+    def update_review(self, review_id, review_data):
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+
+        # prevent protected fields from being updated
+        forbidden = {'id', 'created_at', 'updated_at', 'user_id', 'place_id',}
+        clean_data = {k: v for k, v in review_data.items() if k not in forbidden}
+
+        self.review_repo.update(review_id, clean_data)
+        return self.review_repo.get(review_id)
+
+    def delete_review(self, review_id):
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+
+        self.review_repo.delete(review_id)
+        return True
