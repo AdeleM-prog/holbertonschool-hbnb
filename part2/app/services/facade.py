@@ -1,41 +1,55 @@
 #!/usr/bin/python3
 """
-This module provides the HBnBFacade class.
+Facade module.
 
-The facade acts as the single entry point between the Presentation layer
-(API) and the application's core logic and persistence mechanisms.
+Provides the HBnBFacade class, which acts as the single entry point
+between the Presentation layer (API) and the application's core logic
+and persistence mechanisms.
 """
 
 
 from app.persistence.repository import InMemoryRepository
 from ..models.user import User
+from ..models.place import Place
+from ..models.amenity import Amenity
 from ..models.review import Review
 
 
 class HBnBFacade:
     """
-    Facade class that centralizes access to the application's
-    business logic and repositories.
+    Central access point for all business logic operations.
 
-    This class acts as an intermediary between the Presentation
-    layer (API) and the underlying persistence layer, simplifying
-    communication and enforcing separation of concerns.
+    This class coordinates interactions between:
+    - The API layer (Flask-RESTx)
+    - The domain models (User, Place, Review, Amenity)
+    - The persistence layer (repositories)
+
+    It ensures separation of concerns and encapsulates validation
+    and repository interactions.
     """
     def __init__(self):
         """
-        Initialize the facade and its in-memory repositories.
+        Initialize in-memory repositories for each entity.
 
-        Each entity type (User, Place, Review, Amenity)
-        is managed by a dedicated repository instance.
+        Each entity type is managed by its own repository instance.
         """
         self.user_repo = InMemoryRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # ---------- USERS ----------
+    # ------------------------------------------------------------
+    # -------------------------- USERS ---------------------------
+    # ------------------------------------------------------------
     def create_user(self, user_data):
         """
+        Create and store a new user.
+
+        Args:
+            user_data (dict): Dictionary containing user attributes.
+
+        Returns:
+            User: The created user instance.
         """
         user = User(**user_data)
         self.user_repo.add(user)
@@ -43,35 +57,151 @@ class HBnBFacade:
 
     def get_user(self, user_id):
         """
+        Retrieve a user by ID.
+
+        Args:
+            user_id (str): The user's unique identifier.
+
+        Returns:
+            User | None: The user if found, otherwise None.
         """
         return self.user_repo.get(user_id)
 
     def get_users(self):
         """
+        Retrieve all users.
+
+        Returns:
+            list[User]: List of all stored users.
         """
         return self.user_repo.get_all()
 
     def get_user_by_email(self, email):
         """
+        Retrieve a user by email address.
+
+        Args:
+            email (str): The email to search for.
+
+        Returns:
+            User | None: The matching user if found.
         """
         return self.user_repo.get_by_attribute('email', email)
 
     def update_user(self, user_id, user_data):
         """
+        Update an existing user.
+
+        Protected fields (id, timestamps, admin status, relationships)
+        cannot be modified.
+
+        Args:
+            user_id (str): The user ID.
+            user_data (dict): Fields to update.
+
+        Returns:
+            User | None: Updated user if found, otherwise None.
         """
         user = self.user_repo.get(user_id)
         if not user:
             return None
 
         # prevent protected fields from being updated
-        forbidden = {'id', 'created_at', 'updated_at', 'is_admin', 'place_ids', 'review_ids'}
+        forbidden = {
+            'id', 'created_at', 'updated_at',
+            'is_admin', 'place_ids', 'review_ids'
+            }
         clean_data = {k: v for k, v in user_data.items() if k not in forbidden}
 
         self.user_repo.update(user_id, clean_data)
         return self.user_repo.get(user_id)
 
-    # ---------- REVIEWS ----------
+    # ------------------------------------------------------------
+    # -------------------------- PLACES --------------------------
+    # ------------------------------------------------------------
+    def create_place(self, place_data):
+        """
+        Create and store a new place.
+
+        Args:
+            place_data (dict): Dictionary containing place attributes.
+
+        Returns:
+            Place: The created place instance.
+        """
+        if not self.user_repo.get(place_data["owner_id"]):
+            raise ValueError("Owner not found")
+        place = Place(**place_data)
+        self.place_repo.add(place)
+        return place
+
+    def get_place(self, place_id):
+        """
+        Retrieve a place by ID.
+
+        Args:
+            place_id (str): The place's unique identifier.
+
+        Returns:
+            Place | None: The place if found.
+        """
+        return self.place_repo.get(place_id)
+
+    def get_all_places(self):
+        """
+        Retrieve all places.
+
+        Returns:
+            list[Place]: List of all stored places.
+        """
+        return self.place_repo.get_all()
+
+    def update_place(self, place_id, place_data):
+        """
+        Update an existing place.
+
+        Protected fields (id, timestamps, owner_id) cannot be modified.
+
+        Args:
+            place_id (str): The place ID.
+            place_data (dict): Fields to update.
+
+        Returns:
+            Place | None: Updated place if found, otherwise None.
+        """
+        place = self.place_repo.get(place_id)
+        if not place:
+            return None
+
+        # prevent protected fields from being updated
+        forbidden = {'id', 'created_at', 'updated_at', 'owner_id'}
+        clean_data = {
+            k: v for k, v in place_data.items() if k not in forbidden
+            }
+
+        self.place_repo.update(place_id, clean_data)
+        return self.place_repo.get(place_id)
+
+    # ------------------------------------------------------------
+    # -------------------------- REVIEWS -------------------------
+    # ------------------------------------------------------------
     def create_review(self, review_data):
+        """
+        Create and store a new review.
+
+        Validates that:
+        - The associated user exists
+        - The associated place exists
+
+        Args:
+            review_data (dict): Dictionary containing review attributes.
+
+        Raises:
+            ValueError: If user or place does not exist.
+
+        Returns:
+            Review: The created review instance.
+        """
         if not self.user_repo.get(review_data["user_id"]):
             raise ValueError("User not found")
 
@@ -83,12 +213,36 @@ class HBnBFacade:
         return review
 
     def get_review(self, review_id):
+        """
+        Retrieve a review by ID.
+
+        Args:
+            review_id (str): Review unique identifier.
+
+        Returns:
+            Review | None
+        """
         return self.review_repo.get(review_id)
 
     def get_all_reviews(self):
+        """
+        Retrieve all reviews.
+
+        Returns:
+            list[Review]
+        """
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
+        """
+        Retrieve all reviews associated with a given place.
+
+        Args:
+            place_id (str): Place identifier.
+
+        Returns:
+            list[Review]
+        """
         return [
             review
             for review in self.review_repo.get_all()
@@ -96,18 +250,47 @@ class HBnBFacade:
         ]
 
     def update_review(self, review_id, review_data):
+        """
+        Update an existing review.
+
+        Protected fields (id, timestamps, user_id, place_id)
+        cannot be modified.
+
+        Args:
+            review_id (str): Review ID.
+            review_data (dict): Fields to update.
+
+        Returns:
+            Review | None
+        """
         review = self.review_repo.get(review_id)
         if not review:
             return None
 
         # prevent protected fields from being updated
-        forbidden = {'id', 'created_at', 'updated_at', 'user_id', 'place_id',}
-        clean_data = {k: v for k, v in review_data.items() if k not in forbidden}
+        forbidden = {
+            'id', 'created_at', 'updated_at',
+            'user_id', 'place_id'
+            }
+        clean_data = {
+            k: v for k, v in review_data.items() if k not in forbidden
+            }
 
         self.review_repo.update(review_id, clean_data)
         return self.review_repo.get(review_id)
 
     def delete_review(self, review_id):
+        """
+        Delete a review by ID.
+
+        Args:
+            review_id (str): Review identifier.
+
+        Returns:
+            bool | None:
+                True if deleted,
+                None if review not found.
+        """
         review = self.review_repo.get(review_id)
         if not review:
             return None
