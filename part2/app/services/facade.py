@@ -297,3 +297,60 @@ class HBnBFacade:
 
         self.review_repo.delete(review_id)
         return True
+
+
+    # ------------------------------------------------------------
+    # ------------------------ AMENITIES -------------------------
+    # ------------------------------------------------------------
+
+    def create_amenity(self, amenity_data):
+        if not isinstance(amenity_data, dict):
+            raise TypeError("amenity_data must be a dictionary")
+
+        if "name" not in amenity_data:
+            raise ValueError("name is required")
+
+        name = amenity_data["name"]
+
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+
+        name = name.strip()
+        if name == "":
+            raise ValueError("name cannot be empty")
+
+        amenity = Amenity(name)
+
+        self.amenity_repo.add(amenity)
+
+        return amenity
+
+    def get_amenity(self, amenity_id):
+        return self.amenity_repo.get(amenity_id)
+
+    def get_all_amenities(self):
+        return self.amenity_repo.get_all()
+
+    def update_amenity(self, amenity_id, amenity_data):
+        if not isinstance(amenity_data, dict):
+            raise TypeError("amenity_data must be a dictionary")
+
+    amenity = self.get_amenity(amenity_id)
+    if amenity is None:
+        return None
+
+    if "name" not in amenity_data:
+        raise ValueError("name is required")
+
+    name = amenity_data["name"]
+
+    if not isinstance(name, str):
+        raise TypeError("name must be a string")
+
+    name = name.strip()
+    if name == "":
+        raise ValueError("name cannot be empty")
+
+    self.amenity_repo.update(amenity_id, {"name": name})
+
+    return amenity
