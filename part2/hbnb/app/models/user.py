@@ -55,15 +55,15 @@ class User(BaseModel):
         if not email:
             raise ValueError("Email is required")
 
-        #if not password:
-        #    raise ValueError("Password is required")
+    # if not password:
+    #    raise ValueError("Password is required")
 
         super().__init__()
 
         self.first_name = first_name
         self.last_name = last_name
         self.email = self._validate_email(email)
-        #self.password = self._validate_password(password)
+    # self.password = self._validate_password(password)
         self.password = password
         self.is_admin = False
         self.place_ids = []

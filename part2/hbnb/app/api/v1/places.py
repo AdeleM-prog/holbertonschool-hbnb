@@ -253,7 +253,12 @@ class PlaceResource(Resource):
                 'last_name': owner.last_name,
                 'email': owner.email
             } if owner else None,
-            'amenities': [{'id': aid, 'name': None} for aid in place.amenity_ids],
+            'amenities': [
+                {'id': amenity.id, 'name': amenity.name}
+                for aid in place.amenity_ids
+                for amenity in [facade.get_amenity(aid)]
+                if amenity is not None
+            ],
             'reviews': [
                 {
                     'id': r.id,

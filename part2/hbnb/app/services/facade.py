@@ -9,10 +9,10 @@ and persistence mechanisms.
 
 
 from app.persistence.repository import InMemoryRepository
-from ..models.user import User
-from ..models.place import Place
-from ..models.amenity import Amenity
-from ..models.review import Review
+from app.models.user import User
+from app.models.place import Place
+from app.models.amenity import Amenity
+from app.models.review import Review
 
 
 class HBnBFacade:
@@ -126,6 +126,9 @@ class HBnBFacade:
         Args:
             place_data (dict): Dictionary containing place attributes.
 
+        Raises:
+            ValueError: If the owner does not exist.
+
         Returns:
             Place: The created place instance.
         """
@@ -172,6 +175,12 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             return None
+
+        # Handle amenity_ids separately via the model's helper
+        if 'amenities' in place_data and place_data['amenities'] is not None:
+            place.amenity_ids = []
+            for aid in place_data['amenities']:
+                place.add_amenity_id(aid)
 
         # prevent protected fields from being updated
         forbidden = {'id', 'created_at', 'updated_at', 'owner_id'}
@@ -298,59 +307,85 @@ class HBnBFacade:
         self.review_repo.delete(review_id)
         return True
 
-
     # ------------------------------------------------------------
-    # ------------------------ AMENITIES -------------------------
+    # -------------------------- AMENITIES -----------------------
     # ------------------------------------------------------------
-
     def create_amenity(self, amenity_data):
+        """
+        Create and store a new amenity.
+
+        Validation of name (type, length, empty) is delegated
+        to the Amenity model.
+
+        Args:
+            amenity_data (dict): Dictionary containing amenity attributes.
+
+        Raises:
+            TypeError: If name is not a string.
+            ValueError: If name is empty or exceeds 50 characters.
+
+        Returns:
+            Amenity: The created amenity instance.
+        """
         if not isinstance(amenity_data, dict):
             raise TypeError("amenity_data must be a dictionary")
 
         if "name" not in amenity_data:
             raise ValueError("name is required")
 
-        name = amenity_data["name"]
-
-        if not isinstance(name, str):
-            raise TypeError("name must be a string")
-
-        name = name.strip()
-        if name == "":
-            raise ValueError("name cannot be empty")
-
-        amenity = Amenity(name)
-
+        amenity = Amenity(amenity_data["name"])
         self.amenity_repo.add(amenity)
-
         return amenity
 
     def get_amenity(self, amenity_id):
+        """
+        Retrieve an amenity by ID.
+
+        Args:
+            amenity_id (str): The amenity's unique identifier.
+
+        Returns:
+            Amenity | None: The amenity if found, otherwise None.
+        """
         return self.amenity_repo.get(amenity_id)
 
     def get_all_amenities(self):
+        """
+        Retrieve all amenities.
+
+        Returns:
+            list[Amenity]: List of all stored amenities.
+        """
         return self.amenity_repo.get_all()
 
     def update_amenity(self, amenity_id, amenity_data):
+        """
+        Update an existing amenity.
+
+        Protected fields (id, timestamps) cannot be modified.
+
+        Args:
+            amenity_id (str): The amenity ID.
+            amenity_data (dict): Fields to update.
+
+        Returns:
+            Amenity | None: Updated amenity if found, otherwise None.
+        """
         if not isinstance(amenity_data, dict):
             raise TypeError("amenity_data must be a dictionary")
 
-    amenity = self.get_amenity(amenity_id)
-    if amenity is None:
-        return None
+        amenity = self.get_amenity(amenity_id)
+        if not amenity:
+            return None
 
-    if "name" not in amenity_data:
-        raise ValueError("name is required")
+        if "name" not in amenity_data:
+            raise ValueError("name is required")
 
-    name = amenity_data["name"]
+        # prevent protected fields from being updated
+        forbidden = {'id', 'created_at', 'updated_at'}
+        clean_data = {
+            k: v for k, v in amenity_data.items() if k not in forbidden
+            }
 
-    if not isinstance(name, str):
-        raise TypeError("name must be a string")
-
-    name = name.strip()
-    if name == "":
-        raise ValueError("name cannot be empty")
-
-    self.amenity_repo.update(amenity_id, {"name": name})
-
-    return amenity
+        self.amenity_repo.update(amenity_id, clean_data)
+        return self.amenity_repo.get(amenity_id)

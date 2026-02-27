@@ -10,12 +10,12 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
 })
 
+
 @api.route('/')
 class AmenityList(Resource):
     @api.expect(amenity_model)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
-
     def post(self):
         """Register a new amenity"""
         payload = api.payload
@@ -32,6 +32,7 @@ class AmenityList(Resource):
         """Retrieve a list of all amenities"""
         amenities = facade.get_all_amenities()
         return [{'id': obj.id, 'name': obj.name} for obj in amenities], 200
+
 
 @api.route('/<amenity_id>')
 class AmenityResource(Resource):
