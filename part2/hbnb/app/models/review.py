@@ -5,7 +5,7 @@ Review model module.
 This module defines the Review class, which represents a review
 left by a user for a place in the HBnB application.
 """
-from .base import BaseModel
+from .basemodel import BaseModel
 
 
 class Review(BaseModel):

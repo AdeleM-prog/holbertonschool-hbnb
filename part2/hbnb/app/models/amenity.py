@@ -7,7 +7,7 @@ This module defines the Amenity class, which represents an amenity
 in the HBnB application.
 """
 
-from .base import BaseModel
+from .basemodel import BaseModel
 
 
 class Amenity(BaseModel):

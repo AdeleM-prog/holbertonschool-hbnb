@@ -41,7 +41,7 @@ class UserList(Resource):
 
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
-            return {'error': 'Email already registered'}, 400
+            return {'error': 'Email already registered'}, 409
 
         try:
             new_user = facade.create_user(user_data)
@@ -94,7 +94,17 @@ class UserResource(Resource):
         """Update user information"""
         user_data = api.payload
 
-        updated = facade.update_user(user_id, user_data)
+        # Check email uniqueness if email is being updated
+        if 'email' in user_data:
+            existing = facade.get_user_by_email(user_data['email'])
+            if existing and existing.id != user_id:
+                return {'error': 'Email already registered'}, 409
+
+        try:
+            updated = facade.update_user(user_id, user_data)
+        except (TypeError, ValueError) as e:
+            return {'error': str(e)}, 400
+
         if not updated:
             return {'error': 'User not found'}, 404
 

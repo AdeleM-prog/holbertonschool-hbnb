@@ -7,7 +7,7 @@ of the HBnB application.
 """
 
 
-from .base import BaseModel
+from .basemodel import BaseModel
 
 
 class User(BaseModel):

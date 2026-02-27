@@ -12,7 +12,7 @@ The Place model stores relationships using identifiers:
 """
 
 
-from .base import BaseModel
+from .basemodel import BaseModel
 
 
 class Place(BaseModel):
