@@ -157,7 +157,7 @@ class PlaceList(Resource):
         if not owner:
             return {'error': 'Owner not found'}, 400
 
-        amenities = payload['amenities']
+        amenities = payload.get('amenities', [])
         if amenities is None:
             amenities = []
         if not isinstance(amenities, list):
@@ -301,18 +301,7 @@ class PlaceResource(Resource):
         if not updated:
             return {'error': 'Place not found'}, 404
 
-        if 'amenities' in payload and payload['amenities'] is not None:
-            updated.amenity_ids = payload['amenities']
-
-        return {
-            'id': updated.id,
-            'title': updated.title,
-            'description': updated.description,
-            'price': updated.price,
-            'latitude': updated.latitude,
-            'longitude': updated.longitude,
-            'owner_id': updated.owner_id
-        }, 200
+        return {'message': 'Place updated successfully'}, 200
 
 
 @api.route('/<place_id>/reviews')

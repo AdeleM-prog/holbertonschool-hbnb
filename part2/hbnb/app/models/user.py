@@ -7,6 +7,7 @@ of the HBnB application.
 """
 
 
+import re
 from .basemodel import BaseModel
 
 
@@ -81,21 +82,9 @@ class User(BaseModel):
             ValueError: If the email does not meet structural requirements.
         """
         email = email.strip().lower()
-
-        if email.count("@") != 1:
-            raise ValueError("Email must be valid: it must contain a '@' sign")
-
-        local_part, domain_part = email.split("@")
-
-        if (
-            not local_part
-            or not domain_part
-            or "." not in domain_part
-            or domain_part.startswith(".")
-            or domain_part.endswith(".")
-        ):
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(pattern, email):
             raise ValueError("Email must be valid")
-
         return email
 
     @staticmethod

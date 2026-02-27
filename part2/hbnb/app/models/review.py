@@ -20,6 +20,19 @@ class Review(BaseModel):
     """
 
     def __init__(self, *, rating, text, user_id, place_id):
+        """
+        Initialize a new Review instance.
+
+        Args:
+            rating (int): Rating of the place (1 to 5).
+            text (str): Text content of the review.
+            user_id (str): UUID string of the author.
+            place_id (str): UUID string of the reviewed place.
+
+        Raises:
+            TypeError: If a field type is invalid.
+            ValueError: If a field value is invalid.
+        """
         # Validate ids
         self._validate_uuid(user_id, "user_id")
         self._validate_uuid(place_id, "place_id")
