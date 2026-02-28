@@ -171,26 +171,33 @@ http://localhost:5000/api/v1/
 **Users**
 
 POST /api/v1/users  
-GET /api/v1/users/<id>  
-PUT /api/v1/users/<id>  
+GET /api/v1/users/  
+GET /api/v1/users/<user_id>  
+PUT /api/v1/users/<user_id>  
 
 **Places**
 
-POST /api/v1/places  
-GET /api/v1/places/<id>  
-PUT /api/v1/places/<id>  
+POST /api/v1/places/  
+GET /api/v1/places/  
+GET /api/v1/places/<place_id>  
+PUT /api/v1/places/<place_id>  
+GET /api/v1/places/<place_id>/reviews  
 
 **Reviews**
 
-POST /api/v1/reviews  
-GET /api/v1/reviews/<id>  
-PUT /api/v1/reviews/<id>  
-DELETE /api/v1/reviews/<id>  
+POST /api/v1/reviews/  
+GET /api/v1/reviews/  
+GET /api/v1/reviews/<review_id>  
+PUT /api/v1/reviews/<review_id>  
+DELETE /api/v1/reviews/<review_id>    
 
 **Amenities**
 
-PUT /api/v1/amenities/<id>  
-GET /api/v1/amenities/<id>  
+POST /api/v1/amenities/  
+GET /api/v1/amenities/  
+GET /api/v1/amenities/<amenity_id>  
+PUT /api/v1/amenities/<amenity_id>  
+<br> 
 
 **Validation Rules**
 
@@ -201,7 +208,8 @@ Business entities enforce strict validation:
 - String length limits enforced
 - Invalid data raises exceptions
 <br>
-This ensures data integrity before persistence.
+This ensures data integrity before persistence.  
+Protected fields cannot be modified during updates (e.g., IDs, ownership, relationships).
 
 ---
 ### Architectural Principles
@@ -213,7 +221,9 @@ This project follows:
 ✔ Separation of concerns  
 ✔ Facade pattern for business logic  
 ✔ Modular architecture  
-✔ Validation at model level  
+✔ Validation is enforced at both:
+- model level (creation)
+- service layer (updates & business rules)  
 
 ---
 
