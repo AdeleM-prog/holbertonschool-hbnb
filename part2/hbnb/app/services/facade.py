@@ -380,6 +380,20 @@ class HBnBFacade:
 
         if "name" not in amenity_data:
             raise ValueError("name is required")
+        
+        name = amenity_data["name"]
+
+        #revalidate the "name" format
+        if not isinstance(name, str):
+            raise TypeError("Name must be a string")
+
+        name = name.strip()
+
+        if name == "":
+            raise ValueError("Name cannot be empty")
+
+        if len(name) > 50:
+            raise ValueError("Name must be 50 characters maximum")
 
         # prevent protected fields from being updated
         forbidden = {'id', 'created_at', 'updated_at'}
