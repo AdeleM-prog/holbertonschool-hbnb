@@ -9,7 +9,7 @@ and persistence mechanisms.
 
 
 from app.persistence.repository import InMemoryRepository
-from app.models.user import User
+from app.models.user import User, re
 from app.models.place import Place
 from app.models.amenity import Amenity
 from app.models.review import Review
@@ -113,6 +113,40 @@ class HBnBFacade:
             }
         clean_data = {k: v for k, v in user_data.items() if k not in forbidden}
 
+        # ---- first_name ----
+        if 'first_name' in clean_data:
+            first_name = clean_data['first_name']
+            if not isinstance(first_name, str):
+                raise TypeError("first_name must be a string")
+            first_name = first_name.strip()
+            if first_name == "":
+                raise ValueError("first_name cannot be empty")
+            clean_data['first_name'] = first_name
+
+        # ---- last_name ----
+        if 'last_name' in clean_data:
+            last_name = clean_data['last_name']
+            if not isinstance(last_name, str):
+                raise TypeError("last_name must be a string")
+            last_name = last_name.strip()
+            if last_name == "":
+                raise ValueError("last_name cannot be empty")
+            clean_data['last_name'] = last_name
+
+        # ---- email ----
+        if 'email' in clean_data:
+            email = clean_data['email']
+            if not isinstance(email, str):
+                raise TypeError("email must be a string")
+            email = email.strip().lower()
+            if email == "":
+                raise ValueError("email cannot be empty")
+
+            # Simple email format check (enough for the project)
+            if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
+                raise ValueError("Invalid email format")
+
+            clean_data['email'] = email
         self.user_repo.update(user_id, clean_data)
         return self.user_repo.get(user_id)
 
@@ -178,6 +212,8 @@ class HBnBFacade:
 
         # Handle amenity_ids separately via the model's helper
         if 'amenities' in place_data and place_data['amenities'] is not None:
+            if not isinstance(place_data['amenities'], list):
+                raise TypeError("amenities must be a list of UUID strings")
             place.amenity_ids = []
             for aid in place_data['amenities']:
                 place.add_amenity_id(aid)
@@ -188,8 +224,53 @@ class HBnBFacade:
             k: v for k, v in place_data.items() if k not in forbidden
             }
 
+        # Re-validate updated fields (only if provided)
+        if 'title' in clean_data:
+            title = clean_data['title']
+            if not isinstance(title, str):
+                raise TypeError("Title must be a string")
+            title = title.strip()
+            if not title:
+                raise ValueError("Title cannot be empty")
+            if len(title) > 100:
+                raise ValueError("Title must be <= 100 characters")
+            clean_data['title'] = title
+
+        if 'description' in clean_data:
+            description = clean_data['description']
+            if description is None:
+                description = ""
+            if not isinstance(description, str):
+                raise TypeError("Description must be a string")
+            clean_data['description'] = description.strip()
+
+        if 'price' in clean_data:
+            price = clean_data['price']
+            if not isinstance(price, (int, float)) or type(price) is bool:
+                raise TypeError("Price must be a number")
+            if price <= 0:
+                raise ValueError("Price must be positive")
+            clean_data['price'] = float(price)
+
+        if 'latitude' in clean_data:
+            latitude = clean_data['latitude']
+            if not isinstance(latitude, (int, float)) or type(latitude) is bool:
+                raise TypeError("Latitude must be a number")
+            if latitude < -90.0 or latitude > 90.0:
+                raise ValueError("Latitude must be between -90 and 90")
+            clean_data['latitude'] = float(latitude)
+
+        if 'longitude' in clean_data:
+            longitude = clean_data['longitude']
+            if not isinstance(longitude, (int, float)) or type(longitude) is bool:
+                raise TypeError("Longitude must be a number")
+            if longitude < -180.0 or longitude > 180.0:
+                raise ValueError("Longitude must be between -180 and 180")
+            clean_data['longitude'] = float(longitude)
+
         self.place_repo.update(place_id, clean_data)
         return self.place_repo.get(place_id)
+        
 
     # ------------------------------------------------------------
     # -------------------------- REVIEWS -------------------------
@@ -285,8 +366,26 @@ class HBnBFacade:
             k: v for k, v in review_data.items() if k not in forbidden
             }
 
-        self.review_repo.update(review_id, clean_data)
-        return self.review_repo.get(review_id)
+        # ---- Validate text (if provided) ----
+        if 'text' in clean_data:
+            text = clean_data['text']
+            if not isinstance(text, str):
+                raise TypeError("Text must be a string")
+            text = text.strip()
+            if text == "":
+                raise ValueError("Text cannot be empty")
+            clean_data['text'] = text
+
+        # ---- Validate rating (if provided) ----
+        if 'rating' in clean_data:
+            rating = clean_data['rating']
+            if not isinstance(rating, int) or isinstance(rating, bool):
+                raise TypeError("Rating must be an integer")
+            if rating < 1 or rating > 5:
+                raise ValueError("Rating must be between 1 and 5")
+            clean_data['rating'] = rating
+            self.review_repo.update(review_id, clean_data)
+            return self.review_repo.get(review_id)
 
     def delete_review(self, review_id):
         """
