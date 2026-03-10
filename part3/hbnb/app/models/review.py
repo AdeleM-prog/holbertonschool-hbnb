@@ -1,58 +1,63 @@
-#!/usr/bin/python3
-"""
-Review model module.
-
-This module defines the Review class, which represents a review
-left by a user for a place in the HBnB application.
-"""
 from .basemodel import BaseModel
-
+from .place import Place
+from .user import User
 
 class Review(BaseModel):
-    """
-    Represents a review of a place in the HBnB platform.
+	def __init__(self, text, rating, place, user):
+		super().__init__()
+		self.text = text
+		self.rating = rating
+		self.place = place
+		self.user = user
+	
+	@property
+	def text(self):
+		return self.__text
+	
+	@text.setter
+	def text(self, value):
+		if not value:
+			raise ValueError("Text cannot be empty")
+		if not isinstance(value, str):
+			raise TypeError("Text must be a string")
+		self.__text = value
 
-    A review:
-        - Contains a rating (1 to 5)
-        - Contains a text
-        - Has one author (user_id)
-        - Refers to one place (place_id)
-    """
+	@property
+	def rating(self):
+		return self.__rating
+	
+	@rating.setter
+	def rating(self, value):
+		if not isinstance(value, int):
+			raise TypeError("Rating must be an integer")
+		super().is_between('Rating', value, 1, 6)
+		self.__rating = value
 
-    def __init__(self, *, rating, text, user_id, place_id):
-        """
-        Initialize a new Review instance.
+	@property
+	def place(self):
+		return self.__place
+	
+	@place.setter
+	def place(self, value):
+		if not isinstance(value, Place):
+			raise TypeError("Place must be a place instance")
+		self.__place = value
 
-        Args:
-            rating (int): Rating of the place (1 to 5).
-            text (str): Text content of the review.
-            user_id (str): UUID string of the author.
-            place_id (str): UUID string of the reviewed place.
+	@property
+	def user(self):
+		return self.__user
+	
+	@user.setter
+	def user(self, value):
+		if not isinstance(value, User):
+			raise TypeError("User must be a user instance")
+		self.__user = value
 
-        Raises:
-            TypeError: If a field type is invalid.
-            ValueError: If a field value is invalid.
-        """
-        # Validate ids
-        self._validate_uuid(user_id, "user_id")
-        self._validate_uuid(place_id, "place_id")
-
-        # Validate rating
-        if not isinstance(rating, int):
-            raise TypeError("Rating must be an integer")
-        if rating < 1 or rating > 5:
-            raise ValueError("Rating must be between 1 and 5")
-
-        # Validate text
-        if not isinstance(text, str):
-            raise TypeError("Text must be a string")
-        cleaned_text = text.strip()
-        if not cleaned_text:
-            raise ValueError("Text must not be empty")
-
-        super().__init__()
-
-        self.user_id = user_id
-        self.place_id = place_id
-        self.rating = rating
-        self.text = cleaned_text
+	def to_dict(self):
+		return {
+			'id': self.id,
+			'text': self.text,
+			'rating': self.rating,
+			'place_id': self.place.id,
+			'user_id': self.user.id
+		}
