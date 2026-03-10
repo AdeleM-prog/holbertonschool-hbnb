@@ -89,20 +89,20 @@ class BaseModel(db.Model):
         if len(value) > max_length:
             raise ValueError(f"{name} must be {max_length} characters max.")
 
-    def is_between(self, name, value, min, max):
+    def is_between(self, name, value, min_value, max_value):
         """
         Validate that a numeric value falls within an inclusive range.
 
         Args:
             name (str): Name of the attribute being validated.
             value (int | float): Numeric value to validate.
-            min (int | float): Minimum allowed value.
-            max (int | float): Maximum allowed value.
+            min_value (int | float): Minimum allowed value.
+            max_value (int | float): Maximum allowed value.
 
         Raises:
             ValueError: If the value is outside the inclusive range.
         """
-        if not min <= value <= max:
+        if not min_value <= value <= max_value:
             raise ValueError(
-                f"{name} must be between {min} and {max} included."
+                f"{name} must be between {min_value} and {max_value} included."
                 )

@@ -79,7 +79,7 @@ class Place(BaseModel):
             raise ValueError("Title cannot be empty")
         if not isinstance(value, str):
             raise TypeError("Title must be a string")
-        super().is_max_length('title', value, 100)
+        super().is_max_length('Title', value, 100)
         self.title = value
 #
 #    @property
@@ -122,7 +122,7 @@ class Place(BaseModel):
         """
         if not isinstance(value, (float, int)) or type(value) is bool:
             raise TypeError("Latitude must be a float")
-        super().is_between("latitude", value, -90, 90)
+        super().is_between("Latitude", value, -90, 90)
         self.latitude = float(value)
 #
 #    @property
@@ -143,7 +143,7 @@ class Place(BaseModel):
         """
         if not isinstance(value, (float, int)) or type(value) is bool:
             raise TypeError("Longitude must be a float")
-        super().is_between("longitude", value, -180, 180)
+        super().is_between("Longitude", value, -180, 180)
         self.longitude = float(value)
 
 #    @property
@@ -182,7 +182,7 @@ class Place(BaseModel):
         if value is not None:
             if not isinstance(value, str):
                 raise TypeError("Description must be a string")
-            super().is_max_length('description', value, 1024)
+            super().is_max_length('Description', value, 1024)
         self.description = value
 
     def to_dict(self):
