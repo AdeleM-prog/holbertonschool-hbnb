@@ -18,14 +18,18 @@
     <main>
         <!-- Add something to idfentify the place you're reviewing -->
         <h2> Add a review</h2>
-        <h3 id="place_name">Title of the Place</h3>
+        <h3 id="place-name">Title of the Place</h3>
         <!-- place_name = name of the place to implement dynamically later-->
         <form id="review-form">
             <label for="review">Your Review:</label>
             <textarea id="review" name="review" required></textarea>
             <label for="rating">Rating:</label>
             <select id="rating" name="rating" required>
-                <!-- Options for rating -->
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
             </select>
             <button type="submit">Submit Review</button>
         </form>

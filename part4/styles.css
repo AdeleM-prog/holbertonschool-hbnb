@@ -1,7 +1,4 @@
-/* 
-  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
-  You'll probably need to override some of theese styles.
-*/
+
 
 * {
     box-sizing: border-box;
@@ -9,10 +6,8 @@
     padding: 0;
     font-family: Arial, sans-serif;
 }
-
-body {
-    background-color: #f4f4f4;
-    color: #333;
+html, body {
+    height: 100%;
 }
 
 header {
@@ -21,12 +16,118 @@ header {
     padding: 1rem;
 }
 
+.logo {
+    height: 40px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 nav a {
     color: #fff;
     text-decoration: none;
     margin-left: 1rem;
 }
 
+.login-button {
+    border: 0.5px solid rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    padding: 8px 15px;
+    transition: background-color 0.3s, color 0.3s
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
 main {
+    flex: 1;
     padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+input, textarea, select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    background-color: #333;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.login-button:hover, button:hover {
+    background-color: white;
+    color: #333;
+}
+
+.place-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.review-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.details-button {
+    
+}
+
+.place-details {
+    
+}
+
+.place-info {
+    
+}
+
+.add-review {
+    
+}
+
+textarea {
+    display:block;
+    margin: 20px;
+    padding: 10px;
+    height: 150px;
+    width: 250px;
+    border-radius: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
 }
