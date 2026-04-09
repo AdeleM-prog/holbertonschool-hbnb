@@ -46,7 +46,11 @@ part4/
 ├── scripts.js              # JavaScript logic and API calls
 ├── styles.css              # CSS styles with variables
 ├── images/                 # Folder for graphic resources
-│   └── logo.png           # Application logo
+│   ├── logo.png           # Application logo
+│   ├── appartment.png     # Apartment property image
+│   ├── cosy.png           # Cozy apartment image
+│   ├── loft.png           # Loft property image
+│   └── studio.png         # Studio apartment image
 └── README.md              # Project documentation
 ```
 
@@ -423,19 +427,9 @@ For production:
    - ✓ Submission successful
    - ✓ Review appears in list
 
-## 📚 Additional Resources
 
-- [MDN - Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-- [MDN - Async/Await](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
-- [MDN - DOM APIs](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model)
-- [CSS Variables (Custom Properties)](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)
-
-## 📞 Support
-
-For any questions or bugs, please create an issue in the project repository.
 
 ---
-
-**Version**: 1.0  
+ 
 **Last Updated**: April 2026  
 **Author**: Adele MEGELINK
