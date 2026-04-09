@@ -1,133 +1,459 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap');
 
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+:root {
+  --pink-50:  #fdf2f6;
+  --pink-100: #f9dde8;
+  --pink-200: #f2bcd1;
+  --pink-400: #d9809f;
+  --pink-600: #b85a7a;
+  --pink-800: #7a2f4d;
+
+  --bg:       #fdf2f6;
+  --surface:  #ffffff;
+  --text:     #3a2030;
+  --muted:    #8a6070;
+  --border:   #f0d0de;
+  --accent:   #c4738f;
+  --accent-hover: #a85a77;
+
+  --radius:   10px;
+  --shadow:   0 1px 8px rgba(180, 100, 130, 0.08);
+  --shadow-hover: 0 4px 20px rgba(180, 100, 130, 0.14);
+}
+
 html, body {
-    height: 100%;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 1rem;
-}
-
-.logo {
-    height: 40px;
-}
-
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin-left: 1rem;
-}
-
-.login-button {
-    border: 0.5px solid rgba(255, 255, 255, 0.5);
-    border-radius: 5px;
-    padding: 8px 15px;
-    transition: background-color 0.3s, color 0.3s
+  height: 100%;
+  font-family: 'Jost', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  font-weight: 300;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    background-color: #f4f4f4;
-    color: #333;
+  display: flex;
+  flex-direction: column;
 }
 
+/* ─── HEADER ─────────────────────────────────────────────── */
+
+header {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.logo {
+  height: 32px;
+}
+
+nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+.login-button {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 18px;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.login-button:hover {
+  background-color: var(--accent);
+  color: white !important;
+  border-color: var(--accent);
+}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+
 main {
-    flex: 1;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  flex: 1;
+  padding: 2.5rem 2rem;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ─── FILTER ─────────────────────────────────────────────── */
+
+#filter {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 0.875rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+#filter label {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── FORMS ──────────────────────────────────────────────── */
+
+select, input, textarea {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 300;
+  transition: border-color 0.2s;
+}
+
+select:focus, input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent);
 }
 
 form {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  background-color: var(--surface);
+  padding: 2rem 2.25rem;
+  border-radius: var(--radius);
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
 }
 
-input, textarea, select {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+form h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text);
 }
 
-button {
-    padding: 10px;
-    border: none;
-    background-color: #333;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    align-self: flex-end;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.login-button:hover, button:hover {
-    background-color: white;
-    color: #333;
-}
-
-.place-card {
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
-
-.review-card {
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-}
-
-.details-button {
-    
-}
-
-.place-details {
-    
-}
-
-.place-info {
-    
-}
-
-.add-review {
-    
+form label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 textarea {
-    display:block;
-    margin: 20px;
-    padding: 10px;
-    height: 150px;
-    width: 250px;
-    border-radius: 10px;
+  display: block;
+  height: 130px;
+  width: 100%;
+  resize: vertical;
+  margin: 0;
 }
 
+button {
+  padding: 9px 22px;
+  border: 1px solid var(--accent);
+  background-color: var(--accent);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  align-self: flex-end;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: var(--accent-hover);
+  border-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ─── LOGIN PAGE ─────────────────────────────────────────── */
+
+#login-form {
+  margin: 4rem auto 0;
+}
+
+/* ─── PLACE CARDS ────────────────────────────────────────── */
+
+#places-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.place-card {
+  margin: 0;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.place-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.place-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.place-price {
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.details-button {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 7px 18px;
+  background-color: transparent;
+  color: var(--accent) !important;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  transition: background-color 0.2s, color 0.2s;
+  align-self: flex-start;
+}
+
+.details-button:hover {
+  background-color: var(--accent);
+  color: white !important;
+}
+
+/* ─── PLACE DETAILS PAGE ─────────────────────────────────── */
+
+.place-details, #place-details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 2.25rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+#place-details h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  color: var(--text);
+}
+
+.place-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.place-info .label {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.amenities-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.amenities-list li {
+  background: var(--pink-50);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* ─── REVIEWS ────────────────────────────────────────────── */
+
+#reviews {
+  margin-bottom: 1.5rem;
+}
+
+#reviews h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.review-card {
+  margin: 0 0 0.875rem 0;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.review-rating {
+  color: var(--accent);
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+}
+
+.review-text {
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+/* ─── ADD REVIEW SECTION ─────────────────────────────────── */
+
+#add-review {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem 2rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+#add-review h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+#add-review-link {
+  display: inline-block;
+  padding: 7px 18px;
+  background-color: transparent;
+  color: var(--accent) !important;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+#add-review-link:hover {
+  background-color: var(--accent);
+  color: white !important;
+}
+
+/* ─── ADD REVIEW PAGE ────────────────────────────────────── */
+
+main > h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--text);
+}
+
+main > h3 {
+  color: var(--muted);
+  font-weight: 300;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.03em;
+}
+
+#review-form {
+  margin: 0;
+}
+
+/* ─── MISC ───────────────────────────────────────────────── */
+
+.error-msg {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 0.75rem 0;
+}
+
+/* ─── FOOTER ─────────────────────────────────────────────── */
+
 footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
+  text-align: center;
+  padding: 1rem;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── IMAGES ─────────────────────────────────────────────── */
+
+.place-card-img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.25rem;
+}
+
+.place-detail-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
 }
