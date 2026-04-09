@@ -49,6 +49,7 @@ class Place(BaseModel):
         db.String(36),
         db.ForeignKey('users.id'),
         nullable=False)
+    image_url = db.Column(db.String(256), nullable=True)
     amenities = db.relationship(
         'Amenity',
         secondary=place_amenity,
@@ -196,4 +197,6 @@ class Place(BaseModel):
             'price': self.price,
             'latitude': self.latitude,
             'longitude': self.longitude,
+            'amenities': [{'id': a.id, 'name': a.name} for a in self.amenities],
+            'image_url': self.image_url,
         }
